@@ -70,10 +70,10 @@ elif (str(HOME) == '/home/parker') & ('perigee' in HOSTNAME):
     roms_out3 = Path('/data1/auroral/LO_roms')
     roms_out4 = Path('/data2/parker/LiveOcean_roms/output')
 
-elif (str(HOME) == '/home/parker') & ('apogee' in HOSTNAME):
+elif (str(HOME) == '/dat1/parker/LO_roms') & ('apogee' in HOSTNAME):
     lo_env = 'pm_apogee'
-    roms_out1 = Path('/pgdat1/parker/LO_roms')
-    roms_out2 = Path('/pgdat2/parker/LO_roms')
+    roms_out1 = Path('/dat1/bobayl/LO_output')
+    roms_out2 = Path('/dat2/bobayl/LO_output')
 
 elif (str(HOME) == '/usr/lusers/pmacc'):
     lo_env = 'pm_mox'
