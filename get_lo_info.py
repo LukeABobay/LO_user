@@ -63,7 +63,7 @@ except KeyError:
 if str(HOME) == '/home/bobayl':
     lo_env = 'lb_pc'
 
-elif (str(HOME) == '/home/parker') & ('perigee' in HOSTNAME):
+elif (str(HOME) == '/home/bobayl') & ('perigee' in HOSTNAME):
     lo_env = 'pm_perigee'
     roms_out1 = Path('/agdat1/parker/LO_roms')
     roms_out2 = Path('/agdat2/parker/LO_roms')
@@ -75,7 +75,7 @@ elif (str(HOME) == '/home/bobayl') & ('apogee' in HOSTNAME):
     roms_out1 = Path('/dat1/parker/LO_roms')
     roms_out2 = Path('/pgdat2/parker/LO_roms')
 
-elif (str(HOME) == '/usr/lusers/pmacc'):
+elif (str(HOME) == '/usr/lusers/bobayl'):
     lo_env = 'pm_mox'
     remote_user = 'parker'
     # remote_machine = 'perigee.ocean.washington.edu'
@@ -84,7 +84,7 @@ elif (str(HOME) == '/usr/lusers/pmacc'):
     remote_dir0 = '/dat1/parker'
     local_user = 'pmacc'
 
-elif ((str(HOME) == '/mmfs1/home/pmacc') or (str(HOME) == '/mmfs1/home/darrd')):
+elif ((str(HOME) == '/mmfs1/home/bobayl') or (str(HOME) == '/mmfs1/home/darrd')):
     lo_env = 'pm_klone'
     remote_user = 'parker'
     remote_machine = 'apogee.ocean.washington.edu'
