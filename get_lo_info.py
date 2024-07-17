@@ -35,7 +35,7 @@ traps_name = 'traps00'
 
 # These are places where the ROMS history files are kept
 roms_out = parent / 'LO_roms'
-roms_out1 = parent / 'LO_roms' # placeholder
+roms_out1 = /dat1/parker / 'LO_roms' # placeholder
 roms_out2 = parent / 'BLANK'
 roms_out3 = parent / 'BLANK'
 roms_out4 = parent / 'BLANK'
