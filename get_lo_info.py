@@ -63,8 +63,8 @@ except KeyError:
 if str(HOME) == '/home/bobayl':
     lo_env = 'lb_pc'
 
-elif (str(HOME) == '/home/parker') & ('perigee' in HOSTNAME):
-    lo_env = 'pm_perigee'
+elif (str(HOME) == '/home/bobayl') & ('perigee' in HOSTNAME):
+    lo_env = 'lb_perigee'
     roms_out1 = Path('/agdat1/parker/LO_roms')
     roms_out2 = Path('/agdat2/parker/LO_roms')
     roms_out3 = Path('/data1/auroral/LO_roms')
