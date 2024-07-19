@@ -60,7 +60,7 @@ except KeyError:
 # print('HOME = ' + str(HOME))
 # print('HOSTNAME = ' + HOSTNAME)
 
-if str(HOME) == '/hom/bobayl':
+if (str(HOME) == '/home/bobayl') & ('DESKTOP' in HOSTNAME):
     lo_env = 'lb_pc'
 
 elif (str(HOME) == '/home/parker') & ('perigee' in HOSTNAME):
