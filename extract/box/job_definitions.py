@@ -106,7 +106,7 @@ def get_box(job, Lon, Lat):
         vn_list = 'h,f,pm,pn,mask_rho,salt'
     elif job == 'bobay':
         aa = [-129.9, -122.1, 42.1, 51.9]
-        vn_list = 'h, Uwind, Vwind, u, v, w, temp, salt, oxygen, phytoplankton, zooplankton, f, pm, pn, zeta, mask_rho, shflux, sustr, svstr'
+        vn_list = 'h, Uwind, Vwind, u, v, w, temp, salt, oxygen, phytoplankton, zooplankton'
 
         
     return aa, vn_list
