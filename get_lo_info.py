@@ -13,19 +13,61 @@ their own GitHub repo.
 import os
 from pathlib import Path
 
-# Define a smart ROMS path that falls back if the primary path doesn't exist
+# Define a smart path wrapper that falls back from /dat1 to /dat2
 class SmartROMSPath:
     def __init__(self, primary_base, fallback_base):
         self.primary_base = Path(primary_base)
         self.fallback_base = Path(fallback_base)
 
-    def __truediv__(self, subpath):
+    def resolve_path(self, subpath):
+        """Returns full path from primary or fallback base, depending on existence."""
         primary_path = self.primary_base / subpath
         if primary_path.exists():
             return primary_path
-        else:
-            fallback_path = self.fallback_base / subpath
-            return fallback_path
+        fallback_path = self.fallback_base / subpath
+        return fallback_path
+
+    def __truediv__(self, other):
+        # Enable chaining of paths while preserving fallback logic
+        return SmartROMSSubPath(self, Path(other))
+
+    def __str__(self):
+        return str(self.primary_base)
+
+class SmartROMSSubPath:
+    def __init__(self, smart_base, subpath):
+        self.smart_base = smart_base  # SmartROMSPath instance
+        self.subpath = subpath        # Path relative to base
+
+    def __truediv__(self, other):
+        return SmartROMSSubPath(self.smart_base, self.subpath / other)
+
+    def __fspath__(self):
+        return str(self.smart_base.resolve_path(self.subpath))
+
+    def __str__(self):
+        return str(self.smart_base.resolve_path(self.subpath))
+
+    def __repr__(self):
+        return f"SmartROMSSubPath({self.smart_base.resolve_path(self.subpath)})"
+
+    def exists(self):
+        return self.smart_base.resolve_path(self.subpath).exists()
+
+    def glob(self, pattern):
+        return list(self.smart_base.resolve_path(self.subpath).glob(pattern))
+
+    def is_dir(self):
+        return self.smart_base.resolve_path(self.subpath).is_dir()
+
+    def is_file(self):
+        return self.smart_base.resolve_path(self.subpath).is_file()
+
+    def open(self, *args, **kwargs):
+        return self.smart_base.resolve_path(self.subpath).open(*args, **kwargs)
+
+
+# -------------------------------------------------------------------
 
 # defaults that should work on all machines
 parent = Path(__file__).absolute().parent.parent
@@ -37,18 +79,17 @@ data = parent / 'LO_data'
 # This is where the ROMS source code, makefiles, and executables are
 roms_code = parent / 'LiveOcean_roms'
 
-# This is a new piece of information, to help with integration of
-# Aurora Leeson's new LO_traps repo, 2023.11.03.
+# Integration support for LO_traps
 traps_name = 'traps00'
 
-# These are places where the ROMS history files are kept
+# Default values for roms_out paths
 roms_out = parent / 'LO_roms'
-roms_out1 = Path('/BLANK')  # default, will be set by host check
+roms_out1 = Path('/BLANK')
 roms_out2 = Path('/BLANK')
 roms_out3 = Path('/BLANK')
 roms_out4 = Path('/BLANK')
 
-# these are for mox and klone, other hyak mackines
+# These are for mox and klone (Hyak)
 remote_user = 'BLANK'
 remote_machine = 'BLANK'
 remote_dir0 = 'BLANK'
@@ -63,22 +104,18 @@ try:
 except KeyError:
     HOSTNAME = 'BLANK'
 
-# debugging
-# print('** from get_lo_info.py **')
-# print('HOME = ' + str(HOME))
-# print('HOSTNAME = ' + HOSTNAME)
-
-if (str(HOME) == '/home/bobayl') & ('DESKTOP' in HOSTNAME):
+# Environment-specific configuration
+if (str(HOME) == '/home/bobayl') and ('DESKTOP' in HOSTNAME):
     lo_env = 'lb_pc'
 
-elif (str(HOME) == '/home/parker') & ('perigee' in HOSTNAME):
+elif (str(HOME) == '/home/parker') and ('perigee' in HOSTNAME):
     lo_env = 'pm_perigee'
     roms_out1 = Path('/agdat1/parker/LO_roms')
     roms_out2 = Path('/agdat2/parker/LO_roms')
     roms_out3 = Path('/data1/auroral/LO_roms')
     roms_out4 = Path('/data2/parker/LiveOcean_roms/output')
 
-elif (str(HOME) == '/home/bobayl') & ('apogee' in HOSTNAME):
+elif (str(HOME) == '/home/bobayl') and ('apogee' in HOSTNAME):
     lo_env = 'lb_apogee'
     roms_out1 = SmartROMSPath('/dat1/parker/LO_roms', '/dat2/parker/LO_roms')
     roms_out2 = Path('/dat2/parker/LO_roms')
@@ -97,6 +134,7 @@ elif ((str(HOME) == '/mmfs1/home/pmacc') or (str(HOME) == '/mmfs1/home/darrd')):
     remote_dir0 = '/dat1/parker'
     local_user = 'pmacc'
 
+# Final dictionary
 Ldir0 = dict()
 Ldir0['lo_env'] = lo_env
 Ldir0['parent'] = parent
@@ -111,10 +149,8 @@ Ldir0['roms_out2'] = roms_out2
 Ldir0['roms_out3'] = roms_out3
 Ldir0['roms_out4'] = roms_out4
 Ldir0['which_matlab'] = which_matlab
-#
 Ldir0['remote_user'] = remote_user
 Ldir0['remote_machine'] = remote_machine
 Ldir0['remote_dir0'] = remote_dir0
 Ldir0['local_user'] = local_user
-#
 Ldir0['traps_name'] = traps_name
