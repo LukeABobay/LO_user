@@ -46,8 +46,8 @@ while curr <= end_date:
         continue
 
     # Move output file to tmp directory
-    box_subdir = f"{job}_surf_{ds0}_{ds1}_chunks"
-    filename = f"{job}_surf_{ds0}_{ds1}.nc"
+    box_subdir = f"{job}_{ds0}_{ds1}_chunks"
+    filename = f"{job}_{ds0}_{ds1}.nc"
     src = Path(f"/dat1/bobayl/LO_output/extract/{gtx}/box/{box_subdir}/{filename}")
     dst = tmp_dir / filename
 
