@@ -1,8 +1,16 @@
-# /dat1/bobayl/LO_user/extract/box/run_extractions_and_stage.py
-
 import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
+import smtplib
+from email.message import EmailMessage
+from dotenv import load_dotenv
+import os
+
+# Load email credentials from .env file
+load_dotenv()
+EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+TO_EMAIL = EMAIL_ADDRESS  # You can change this if needed
 
 # Configuration
 start_date = datetime(2015, 7, 1)
@@ -58,3 +66,20 @@ while curr <= end_date:
         print(f"  ✘ Output file not found: {src}")
 
     curr = next_month
+
+# Send notification email
+msg = EmailMessage()
+msg["Subject"] = "LiveOcean Extraction Complete"
+msg["From"] = EMAIL_ADDRESS
+msg["To"] = TO_EMAIL
+msg.set_content(f"Extractions from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')} are complete.")
+
+try:
+    with smtplib.SMTP("smtp.oregonstate.edu", 587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+    print("✔ Notification email sent.")
+except Exception as e:
+    print(f"✘ Failed to send notification email: {e}")
