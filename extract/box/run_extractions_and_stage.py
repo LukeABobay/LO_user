@@ -13,8 +13,8 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 TO_EMAIL = EMAIL_ADDRESS  # You can change this if needed
 
 # Configuration
-start_date = datetime(2015, 7, 1)
-end_date = datetime(2015, 7, 31)
+start_date = datetime(2016, 10, 1)
+end_date = datetime(2016, 10, 31)
 gtx = "cas7_t0_x4b"
 roms_out_num = "1"
 job = "bobay"
