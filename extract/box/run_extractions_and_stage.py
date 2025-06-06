@@ -1,4 +1,4 @@
-# /dat1/bobayl/LO_user/extract/box/run_extractions_and_stage.pyMore actions
+# /dat1/bobayl/LO_user/extract/box/run_extractions_and_stage.py
 
 import subprocess
 from datetime import datetime, timedelta
@@ -48,7 +48,7 @@ while curr <= end_date:
     # Move output file to tmp directory
     box_subdir = f"{job}_{ds0}_{ds1}_chunks"
     filename = f"{job}_{ds0}_{ds1}.nc"
-    src = Path(f"/dat1/bobayl/LO_output/extract/{gtx}/box/{box_subdir}/{filename}")More actions
+    src = Path(f"/dat1/bobayl/LO_output/extract/{gtx}/box/{box_subdir}/{filename}")
     dst = tmp_dir / filename
 
     if src.exists():
