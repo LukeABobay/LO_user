@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Configuration
 start_date = datetime(2019, 1, 1)
-end_date = datetime(2018, 4, 30)
+end_date = datetime(2019, 4, 30)
 gtx = "cas7_t0_x4b"
 roms_out_num = "1"
 job = "bobay"
