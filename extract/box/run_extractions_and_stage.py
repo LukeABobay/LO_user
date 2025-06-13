@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 # Configuration
-start_date = datetime(2022, 1, 1)
-end_date = datetime(2022, 6, 30)
+start_date = datetime(2022, 7, 1)
+end_date = datetime(2022, 12, 31)
 gtx = "cas7_t0_x4b"
 roms_out_num = "1"
 job = "bobay"
