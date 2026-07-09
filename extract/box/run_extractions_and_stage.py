@@ -1,39 +1,14 @@
 # /dat1/bobayl/LO_user/extract/box/run_extractions_and_stage.py
 
 import subprocess
-from datetime import datetime
 from pathlib import Path
 
 # Configuration
-isiis_dates = [
-    "2022-03-06",
-    "2022-03-07",
-    "2022-03-08",
-    "2022-03-09",
-    "2022-03-10",
-    "2022-03-12",
-    "2022-07-21",
-    "2022-07-22",
-    "2022-07-23",
-    "2022-07-24",
-    "2022-07-25",
-    "2022-07-26",
-    "2022-07-27",
-    "2022-07-28",
-    "2023-02-17",
-    "2023-02-18",
-    "2023-02-20",
-    "2023-02-24",
-    "2023-02-25",
-    "2023-02-26",
-    "2023-08-11",
-    "2023-08-12",
-    "2023-08-13",
-    "2023-08-14",
-    "2023-08-15",
-    "2023-08-16",
-    "2023-08-17",
-    "2023-08-20",
+isiis_months = [
+    ("2022.03.01", "2022.03.31"),
+    ("2022.07.01", "2022.07.31"),
+    ("2023.02.01", "2023.02.28"),
+    ("2023.08.01", "2023.08.31"),
 ]
 gtx = "cas7_t0_x4b"
 roms_out_num = "1"
@@ -45,11 +20,12 @@ script = "/dat1/bobayl/LO/extract/box/extract_box_chunks.py"
 tmp_dir = Path("/home/bobayl/tmp_lo_transfer")
 tmp_dir.mkdir(parents=True, exist_ok=True)
 
-# Loop over each date with ISIIS NBSS observations.
-for isiis_date in isiis_dates:
-    curr = datetime.strptime(isiis_date, "%Y-%m-%d")
-    ds0 = curr.strftime("%Y.%m.%d")
-    ds1 = ds0
+n_success = 0
+n_failed = 0
+n_skipped = 0
+
+# Loop over full months that contain ISIIS NBSS observations.
+for ds0, ds1 in isiis_months:
     filename = f"{job}_{ds0}_{ds1}.nc"
     dst = tmp_dir / filename
 
@@ -57,6 +33,7 @@ for isiis_date in isiis_dates:
 
     if dst.exists():
         print(f"  -> {filename} is already staged at {dst}. Skipping.")
+        n_skipped += 1
         continue
 
     result = subprocess.run([
@@ -73,6 +50,7 @@ for isiis_date in isiis_dates:
 
     if result.returncode != 0:
         print(f"  x Extraction failed for {ds0} to {ds1}")
+        n_failed += 1
         continue
 
     box_subdir = f"{job}_{ds0}_{ds1}_chunks"
@@ -81,8 +59,14 @@ for isiis_date in isiis_dates:
     if src.exists():
         print(f"  -> Moving {filename} to {dst}")
         dst.write_bytes(src.read_bytes())
+        n_success += 1
     else:
         print(f"  x Output file not found: {src}")
+        n_failed += 1
 
 Path("/home/bobayl/tmp_lo_transfer/extraction.done").touch()
-print("All extractions completed. Flag file created.")
+print(
+    "All extractions completed. "
+    f"Successful: {n_success}; skipped: {n_skipped}; failed: {n_failed}. "
+    "Flag file created."
+)
