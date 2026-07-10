@@ -34,8 +34,14 @@ if not DEFAULT_LO_OUTPUT_ROOT.exists():
 LO_OUTPUT_ROOT = Path(os.environ.get("LIVE_OCEAN_LO_OUTPUT_ROOT", str(DEFAULT_LO_OUTPUT_ROOT)))
 
 STAGE_DIR = Path(os.environ.get("LIVE_OCEAN_STAGE_DIR", "/home/bobayl/tmp_lo_transfer"))
-MAX_STAGED_FILES = int(os.environ.get("LIVE_OCEAN_MAX_STAGED_FILES", "2"))
-WAIT_SECONDS = int(os.environ.get("LIVE_OCEAN_WAIT_SECONDS", "300"))
+MAX_STAGED_FILES = int(os.environ.get(
+    "LIVE_OCEAN_MAX_STAGED_FILES",
+    os.environ.get("MAX_STAGED_FILES", "4"),
+))
+WAIT_SECONDS = int(os.environ.get(
+    "LIVE_OCEAN_WAIT_SECONDS",
+    os.environ.get("STAGE_WAIT_SECONDS", "60"),
+))
 STOP_ON_FAILURE = os.environ.get("LIVE_OCEAN_STOP_ON_FAILURE", "True").lower() == "true"
 
 DONE_FLAG = STAGE_DIR / "extraction.done"
